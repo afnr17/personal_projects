@@ -8,7 +8,7 @@ except ImportError:  # python 2
     import Tkinter as tkinter
 
 
-""" """
+""" Takes in a number string and returns the coresponding part and color"""
 def convert_to_part_and_color(number_message):
 	part_and_color = ['EMPTY', '#e0e0e0']
 	if number_message == '1':
@@ -33,10 +33,12 @@ def convert_to_part_and_color(number_message):
 	return part_and_color
 
 
-""" """
+""" Takes in a slot number and a part number and change the interface"""
 def change_robot_slots(slot, part_number):
+	# Converts the part number to a part name and color
 	part_and_color = convert_to_part_and_color(part_number)
 
+	# Changes the interface for the desired slot
 	if slot == 1:
 		robot_slot_1["text"] = part_and_color[0]
 		robot_slot_1["bg"] = part_and_color[1]
@@ -45,10 +47,12 @@ def change_robot_slots(slot, part_number):
 		robot_slot_2["bg"] = part_and_color[1]
 
 
-""" """
+""" Takes in a slot number and a part number and change the interface"""
 def change_assembly_slots(slot, part_number):
+	# Converts the part number to a part name and color
 	part_and_color = convert_to_part_and_color(part_number)
 
+	# Changes the interface for the desired slot
 	if slot == 1:
 		assembly_slot_1["text"] = part_and_color[0]
 		assembly_slot_1["bg"] = part_and_color[1]
@@ -125,19 +129,21 @@ main_window.geometry("680x480+100+100")
 main_window["padx"] = 8
 main_window["pady"] = 8
 
+# Creates a header for the production schedule
 heading = tkinter.Label(main_window, text='Daily production schedule', relief='ridge', width=30, bg='#2286c3', fg='#ffffff')
 heading.grid(row=0, column=0, columnspan=2, sticky='nsew')
 
+# Creates sub-headers for products and statuses
 product_text = tkinter.Label(main_window, text='Product', relief='ridge', width=15, bg='#64b5f6')
 product_text.grid(row=1, column=0, columnspan=1, sticky='nsew')
-
 status_text = tkinter.Label(main_window, text='Status', relief='ridge', width=15, bg='#64b5f6')
 status_text.grid(row=1, column=1, columnspan=1, sticky='nsew')
 
-
-print("Loading in production plan..")
+# Uses the loadProductionSchedule class to save the production plan as a list
 product_list = loadProductionSchedule.load_production_plan()
+rospy.loginfo("Loading in production plan..")
 
+# Goes through the list and adds each product to the interface
 for i in range(2, (len(product_list))+2):
     tkinter.Label(main_window, text=product_list[i-2], relief='ridge', width=15, bg='#e0e0e0').grid(row=i, column=0, columnspan=1, sticky='nsew')
     tkinter.Label(main_window, text='Waiting', relief='ridge', width=15, bg='#e0e0e0').grid(row=i, column=1, columnspan=1, sticky='nsew')
@@ -152,7 +158,7 @@ robot_slot_1.grid(row=2, column=6, columnspan=1, sticky='nsew')
 robot_slot_2 = tkinter.Label(main_window, text='EMPTY', relief='ridge', width=15, bg='#e0e0e0')
 robot_slot_2.grid(row=2, column=7, columnspan=1, sticky='nsew')
 
-# Filler to make space between
+# Filler to make space between production schedule and slots
 filler_slot = tkinter.Label(main_window, text=' ', width=10)
 filler_slot.grid(row=0, column=5, columnspan=1, sticky='nsew')
 
