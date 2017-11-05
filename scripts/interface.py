@@ -147,7 +147,7 @@ rospy.loginfo("Loading in production plan..")
 for i in range(2, (len(product_list))+2):
     tkinter.Label(main_window, text=product_list[i-2], relief='ridge', width=15, bg='#e0e0e0').grid(row=i, column=0, columnspan=1, sticky='nsew')
     tkinter.Label(main_window, text='Waiting', relief='ridge', width=15, bg='#e0e0e0').grid(row=i, column=1, columnspan=1, sticky='nsew')
-    tkinter.Button(main_window, text='Fail', relief='ridge', bg='red').grid(row=i, column=2, columnspan=1, sticky='nsew')
+    #tkinter.Button(main_window, text='Fail', command=lambda: do_stuff("lambda can take parameters"), relief='ridge', bg='red').grid(row=i, column=2, columnspan=1, sticky='nsew')
 
 
 # Creating robot slots
