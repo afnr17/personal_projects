@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy
 
+# Dictionary of products
 product = { "P1": ["C1", "C3", "C4", "C4"],
 			"P2": ["C1", "C2", "C5", "C6"],
 			"P3": ["C3", "C3", "C5"],
