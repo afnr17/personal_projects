@@ -34,10 +34,7 @@ def get_parts_to_fetch(products):
 	parts_joined = []
 	for product in products:
 		parts_joined += return_parts(product)
-	log_string = "The following parts were added to the production schedule: "
-	for part in parts_joined:
-		log_string += (part + " ")
-	rospy.loginfo(log_string)
+	return parts_joined
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 import rospy
 from std_msgs.msg import String
 import loadProductionSchedule
+import convertProductsToParts
 try:
     import tkinter
 except ImportError:  # python 2
@@ -33,8 +34,20 @@ def convert_to_part_and_color(number_message):
 	return part_and_color
 
 
-def send_plan_to_robot():
-	send_button.configure(text = "Send plan again", command=send_plan_to_robot)
+def send_plan_to_robot(products_to_send):
+	parts = convertProductsToParts.get_parts_to_fetch(products_to_send)
+	pub = rospy.Publisher('plan_whisperer', String, queue_size=10)
+	parts_to_fetch_string = ("INITIAL_PART_LIST ")
+	for part in parts:
+		parts_to_fetch_string += (part + " ")
+	rospy.loginfo(parts_to_fetch_string)
+	rate = rospy.Rate(1)
+	#pub.publish(parts_to_fetch_string)
+	rate.sleep()
+	pub.publish(parts_to_fetch_string)
+	send_button.configure(text = "Send initial plan again")
+	
+	
 
 
 
@@ -119,8 +132,6 @@ def assembly_callback(data):
 """ Function that initializes this as the interface node
 	and subscribes to product_schedule, robot_inventory and assembly_line subjects"""
 def listener():
-	# Initializes the node as interface
-    rospy.init_node('interface', anonymous=True)
     # Subscribes to robot_inventory and assembly_line topics
     rospy.Subscriber('robot_inventory', String, robot_callback)
     rospy.Subscriber('assembly_line', String, assembly_callback)
@@ -148,10 +159,6 @@ main_window["pady"] = 8
 heading = tkinter.Label(main_window, text='Daily production schedule', relief='ridge', width=30, bg='#2286c3', fg='#ffffff')
 heading.grid(row=0, column=0, columnspan=2, sticky='nsew')
 
-# Creating a button for sending production schedule to robot
-send_button = tkinter.Button(main_window, text='Send plan to robot', command=send_plan_to_robot, relief='ridge', width=15, bg='#716de1', fg='#ffffff', activebackground='#504adf', activeforeground='#ffffff')
-send_button.grid(row=0, column=2, columnspan=4, sticky='nsew')
-
 # Creates sub-headers for products and statuses
 product_text = tkinter.Label(main_window, text='Product', relief='ridge', width=15, bg='#64b5f6')
 product_text.grid(row=1, column=0, columnspan=1, sticky='nsew')
@@ -170,6 +177,9 @@ for i in range(2, (len(product_list))+2):
     #tkinter.Button(main_window, text='Fail', command=lambda: do_stuff("lambda can take parameters"), relief='ridge', bg='red').grid(row=i, column=2, columnspan=1, sticky='nsew')
     # product_id_list.append(i)
 
+# Creating a button for sending production schedule to robot
+send_button = tkinter.Button(main_window, text='Send plan to robot', command=lambda: send_plan_to_robot(product_list), relief='ridge', width=15, bg='#716de1', fg='#ffffff', activebackground='#504adf', activeforeground='#ffffff')
+send_button.grid(row=0, column=2, columnspan=4, sticky='nsew')
 
 # Creating robot slots
 heading_robot = tkinter.Label(main_window, text='Robot inventory slots', relief='ridge', width=30, bg='#64b5f6')
@@ -200,6 +210,9 @@ assembly_slot_6 = tkinter.Label(main_window, text='EMPTY', relief='ridge', width
 assembly_slot_6.grid(row=8, column=7, columnspan=1, sticky='nsew')
 
 """ END OF CREATING INTERFACE """
+
+# Initializes the node as interface
+rospy.init_node('interface', anonymous=True)
 
 # If this is the main file run this code
 if __name__ == '__main__':
