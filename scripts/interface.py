@@ -33,6 +33,21 @@ def convert_to_part_and_color(number_message):
 	return part_and_color
 
 
+def send_plan_to_robot():
+	send_button.configure(text = "Send plan again", command=send_plan_to_robot)
+
+
+
+""" Takes in a product ID and a status code to change the status of some product
+def change_product_status(product_id, status_code):
+	if status_code == 1:
+		# Change status to fetching parts
+	elif status_code == 2:
+		# Change status to ready for QC
+		print("hallo")
+"""
+
+
 """ Takes in a slot number and a part number and change the interface"""
 def change_robot_slots(slot, part_number):
 	# Converts the part number to a part name and color
@@ -133,6 +148,10 @@ main_window["pady"] = 8
 heading = tkinter.Label(main_window, text='Daily production schedule', relief='ridge', width=30, bg='#2286c3', fg='#ffffff')
 heading.grid(row=0, column=0, columnspan=2, sticky='nsew')
 
+# Creating a button for sending production schedule to robot
+send_button = tkinter.Button(main_window, text='Send plan to robot', command=send_plan_to_robot, relief='ridge', width=15, bg='#716de1', fg='#ffffff', activebackground='#504adf', activeforeground='#ffffff')
+send_button.grid(row=0, column=2, columnspan=4, sticky='nsew')
+
 # Creates sub-headers for products and statuses
 product_text = tkinter.Label(main_window, text='Product', relief='ridge', width=15, bg='#64b5f6')
 product_text.grid(row=1, column=0, columnspan=1, sticky='nsew')
@@ -141,6 +160,7 @@ status_text.grid(row=1, column=1, columnspan=1, sticky='nsew')
 
 # Uses the loadProductionSchedule class to save the production plan as a list
 product_list = loadProductionSchedule.load_production_plan()
+product_id_list = []
 rospy.loginfo("Loading in production plan..")
 
 # Goes through the list and adds each product to the interface
@@ -148,6 +168,7 @@ for i in range(2, (len(product_list))+2):
     tkinter.Label(main_window, text=product_list[i-2], relief='ridge', width=15, bg='#e0e0e0').grid(row=i, column=0, columnspan=1, sticky='nsew')
     tkinter.Label(main_window, text='Waiting', relief='ridge', width=15, bg='#e0e0e0').grid(row=i, column=1, columnspan=1, sticky='nsew')
     #tkinter.Button(main_window, text='Fail', command=lambda: do_stuff("lambda can take parameters"), relief='ridge', bg='red').grid(row=i, column=2, columnspan=1, sticky='nsew')
+    # product_id_list.append(i)
 
 
 # Creating robot slots
@@ -159,8 +180,8 @@ robot_slot_2 = tkinter.Label(main_window, text='EMPTY', relief='ridge', width=15
 robot_slot_2.grid(row=2, column=7, columnspan=1, sticky='nsew')
 
 # Filler to make space between production schedule and slots
-filler_slot = tkinter.Label(main_window, text=' ', width=10)
-filler_slot.grid(row=0, column=5, columnspan=1, sticky='nsew')
+#filler_slot = tkinter.Label(main_window, text=' ', width=10)
+#filler_slot.grid(row=0, column=5, columnspan=1, sticky='nsew')
 
 # Creating assembly line slots
 heading_assembly = tkinter.Label(main_window, text='Parts in assembly', relief='ridge', width=30, bg='#64b5f6')
