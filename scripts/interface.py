@@ -52,16 +52,16 @@ def send_plan_to_robot(products_to_send):
 """ Fails a product if the user entered ID matches one in the list"""
 def fail_button_callback():
 	global fail_entry, product_list, product_id_list
-	tekst_der_staar = fail_entry.get()
-	print(tekst_der_staar)
+	text_input = fail_entry.get()
+	print(text_input)
 
-	if int(tekst_der_staar) in product_id_list:
-		print(product_list[int(tekst_der_staar)-2])
-		tkinter.Label(main_window, text='Failed', relief='ridge', width=15, bg='#e0e0e0').grid(row=int(tekst_der_staar), column=2, columnspan=1, sticky='nsew')
+	if int(text_input) in product_id_list:
+		print(product_list[int(text_input)-2])
+		tkinter.Label(main_window, text='Failed', relief='ridge', width=15, bg='#e0e0e0').grid(row=int(text_input), column=2, columnspan=1, sticky='nsew')
 
 	
 """ Takes in a product ID and a status code to change the status of some product"""
-def change_product_status(status_code):
+"""def change_product_status(status_code):
 	if status_code == 1:
 		# Change status to fetching parts
 		print("fetching parts")
@@ -69,7 +69,7 @@ def change_product_status(status_code):
 		# Change status to ready for QC
 		print("Assembled")
 		tkinter.Label(main_window, text='Assembled', relief='ridge', width=15, bg='#e0e0e0').grid(row=global_counter, column=2, columnspan=1, sticky='nsew')
-
+"""
 
 """ Takes in a slot number and a part number and change the interface"""
 def change_robot_slots(slot, part_number):
